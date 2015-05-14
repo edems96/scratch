@@ -46,6 +46,10 @@ Texture *Texture::loadFromFile(const char *path) {
 	return new Texture(id);
 }
 
+GLuint* Texture::getImage() {
+	return mImage;
+}
+
 void Texture::Bind() {
 	glBindTexture(GL_TEXTURE_2D, mImage[0]);
 }

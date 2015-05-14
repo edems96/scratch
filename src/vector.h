@@ -29,7 +29,9 @@ class Vector {
 		Vector operator+=(const Vector &vector);
 		Vector operator-=(const Vector &vector);
 		Vector operator*=(const float n);
-		Vector operator/=(const float n);
+		Vector operator/=(const float n
+		
+		bool operator==(const Vector &vector);
 		
 		float length();
 		

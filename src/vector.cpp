@@ -82,6 +82,10 @@ Vector Vector::operator/=(const float n) {
 	return *this;
 }
 
+bool Vector::operator==(const Vector &vector) {
+	return x == vector.x && y == vector.y;
+}
+
 float Vector::length() {
 	return sqrt((x*x) + (y*y));
 }
