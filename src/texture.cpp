@@ -1,6 +1,6 @@
 #include "texture.h"
 
-Texture::Texture(const GLuint image) {
+Texture::Texture(const GLuint image[1]) {
 	mImage = image;
 }
 
@@ -29,10 +29,10 @@ Texture *Texture::loadFromFile(const char *path) {
 							
 	SDL_Surface *image2 = SDL_ConvertSurface(image, &form, SDL_SWSURFACE);
 	
-	GLuint id;
+	GLuint id[1];
 	glGenTextures(1, &id);
 	
-	glBindTexture(GL_TEXTURE_2D, id);
+	glBindTexture(GL_TEXTURE_2D, id[0]);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image2->w, image2->h, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, image2->pixels);
 	
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -47,5 +47,5 @@ Texture *Texture::loadFromFile(const char *path) {
 }
 
 void Texture::Bind() {
-	glBindTexture(GL_TEXTURE_2D, mImage);
+	glBindTexture(GL_TEXTURE_2D, mImage[0]);
 }

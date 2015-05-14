@@ -13,9 +13,9 @@
 class Texture {
 	
 	private:
-		GLuint mImage;
+		GLuint mImage[1];
 		
-		Texture(const GLuint image);
+		Texture(const GLuint image[1]);
 		~Texture();
 		
 	public:
