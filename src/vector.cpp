@@ -23,17 +23,26 @@ float Vector::getY() {
 	return y;
 }
 
-void Vector::set(float x, float y) {
+Vector Vector::set(float x, float y) {
 	this->x = x;
 	this->y = y;
+	
+	return *this;
 }
 
-void Vector::setX(float x) {
-	this->x = x;
+Vector Vector::set(const Vector &vector) {
+	x = vector.x;
+	y = vector.y;
+	
+	return *this;
 }
 
-void Vector::setY(float y) {
-	this->y = y;
+Vector Vector::setX(float x) {
+	this->x = x; return *this;
+}
+
+Vector Vector::setY(float y) {
+	this->y = y; return *this;
 }
 
 Vector Vector::operator+(const Vector &vector) {
@@ -90,13 +99,15 @@ float Vector::length() {
 	return sqrt((x*x) + (y*y));
 }
 
-void Vector::normalize() {
+Vector Vector::normalize() {
 	float l = length();
 	
 	if( l != 0 ) {
 		x /= l;
 		y /= l;
 	}
+	
+	return *this;
 }
 
 std::string Vector::toString() {

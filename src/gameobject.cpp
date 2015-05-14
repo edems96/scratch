@@ -1,7 +1,7 @@
 #include "gameobject.h"
 
 GameObject::GameObject() {
-	rotate = 0;
+	mRotate = 0;
 }
 
 GameObject::~GameObject() {
@@ -25,11 +25,11 @@ Vector GameObject::getSize() {
 }
 
 GameObject GameObject::setRotate(const float angle) {
-	mAngle = angle; return *this;
+	mRotate = angle; return *this;
 }
 
 float GameObject::getRotate() {
-	return mAngle;
+	return mRotate;
 }
 
 void GameObject::Update() {

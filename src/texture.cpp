@@ -1,11 +1,14 @@
 #include "texture.h"
 
-Texture::Texture(const GLuint image[1]) {
+Texture::Texture() {
+}
+
+Texture::Texture(GLuint *image) {
 	mImage = image;
 }
 
 Texture::~Texture() {
-	glDeleteTextures(1, &mImage);
+	glDeleteTextures(1, mImage);
 }
 
 Texture *Texture::loadFromFile(const char *path) {
@@ -30,7 +33,7 @@ Texture *Texture::loadFromFile(const char *path) {
 	SDL_Surface *image2 = SDL_ConvertSurface(image, &form, SDL_SWSURFACE);
 	
 	GLuint id[1];
-	glGenTextures(1, &id);
+	glGenTextures(1, id);
 	
 	glBindTexture(GL_TEXTURE_2D, id[0]);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image2->w, image2->h, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, image2->pixels);
@@ -44,6 +47,10 @@ Texture *Texture::loadFromFile(const char *path) {
 	printf("Imaged loaded: %s\n", path);
 	
 	return new Texture(id);
+}
+
+Texture Texture::setImage(GLuint *image) {
+	mImage = image; return *this;
 }
 
 GLuint* Texture::getImage() {

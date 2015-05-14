@@ -13,14 +13,16 @@
 class Texture {
 	
 	private:
-		GLuint mImage[1];
+		GLuint *mImage;
 		
 	public:
 		static Texture *loadFromFile(const char *path);
 		
-		Texture(const GLuint image[1]);
+		Texture();
+		Texture(GLuint *image);
 		~Texture();
 		
+		Texture setImage(GLuint *image);
 		GLuint* getImage();
 		
 		void Bind();

@@ -17,9 +17,10 @@ class Vector {
 		float getX();
 		float getY();
 		
-		void set(float x, float y);
-		void setX(float x);
-		void setY(float y);
+		Vector set(float x, float y);
+		Vector set(const Vector &vector);
+		Vector setX(float x);
+		Vector setY(float y);
 		
 		Vector operator+(const Vector &vector);
 		Vector operator-(const Vector &vector);
@@ -29,13 +30,13 @@ class Vector {
 		Vector operator+=(const Vector &vector);
 		Vector operator-=(const Vector &vector);
 		Vector operator*=(const float n);
-		Vector operator/=(const float n
+		Vector operator/=(const float n);
 		
 		bool operator==(const Vector &vector);
 		
 		float length();
 		
-		void normalize();
+		Vector normalize();
 		
 		std::string toString();
 		const char* toStr();
