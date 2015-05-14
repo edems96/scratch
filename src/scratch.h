@@ -31,6 +31,7 @@ class Scratch {
 		Background *background;
 		
 		void Init();
+		void InitOpenGL();
 		void Run();
 		
 		void HandleEvent(SDL_Event event);

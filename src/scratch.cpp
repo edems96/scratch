@@ -54,18 +54,29 @@ void Scratch::Init() {
 		return;
 	}
 	
+	InitOpenGL();
+	
+	background = new Background(SCREEN_WIDTH, SCREEN_HEIGHT);
+	
+	running = true;
+	Run();
+}
+
+void Scratch::InitOpenGL() {
+	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
+	
+	glOrtho(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, 0, 1);
 	
 	glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 	
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	
-	background = new Background(SCREEN_WIDTH, SCREEN_HEIGHT);
-	
-	running = true;
-	Run();
+	glEnable(GL_TEXTURE_2D);
+	//glEnable(GL_BLEND);
 }
 
 void Scratch::Run() {
@@ -111,6 +122,7 @@ void Scratch::Update() {
 
 void Scratch::Draw() {
 	glClear(GL_COLOR_BUFFER_BIT);
+	glLoadIdentity();
 	
 	background->Draw();
 }
