@@ -33,7 +33,7 @@ Texture *Texture::loadFromFile(const char *path) {
 	SDL_Surface *image2 = SDL_ConvertSurface(image, &form, SDL_SWSURFACE);
 	
 	GLuint id[1];
-	glGenTextures(1, id);
+	glGenTextures(1, &id[0]);
 	
 	glBindTexture(GL_TEXTURE_2D, id[0]);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image2->w, image2->h, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, image2->pixels);
@@ -44,7 +44,7 @@ Texture *Texture::loadFromFile(const char *path) {
 	SDL_FreeSurface(image);
 	SDL_FreeSurface(image2);
 	
-	printf("Imaged loaded: %s\n", path);
+	printf("Imaged loaded(%d): %s\n", id[0], path);
 	
 	return new Texture(id);
 }
@@ -58,5 +58,6 @@ GLuint* Texture::getImage() {
 }
 
 void Texture::Bind() {
+	printf("bind: %d\n", mImage[0]); // error here
 	glBindTexture(GL_TEXTURE_2D, mImage[0]);
 }
