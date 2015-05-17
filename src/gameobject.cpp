@@ -12,8 +12,8 @@ GameObject GameObject::setPosition(const Vector &position) {
 	mPosition.set(position); return *this;
 }
 
-Vector GameObject::getPosition() {
-	return Vector(mPosition);
+Vector *GameObject::getPosition() {
+	return &mPosition;
 }
 
 GameObject GameObject::setSize(const Vector &size) {
@@ -33,6 +33,7 @@ float GameObject::getRotate() {
 }
 
 void GameObject::Update() {
+	
 }
 
 void GameObject::Draw() {

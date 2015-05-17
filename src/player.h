@@ -1,16 +1,25 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include <cstdio>
+
+#include <SDL2/SDL.h>
+
+#include <GL/GL.h>
+
 #include "gameobject.h"
+#include "camera.h"
 
 class Player : GameObject {
 	
 	private:
-		int mHealth;
-		float mSpeed;
+		Camera camera;
+		
+		int health;
+		float speed;
 		
 	public:
-		Player();
+		Player(const Vector &position);
 		~Player();
 		
 		Player setHealth(const int health);
@@ -18,6 +27,11 @@ class Player : GameObject {
 		
 		Player setSpeed(const float speed);
 		float getSpeed();
+		
+		void Update();
+		void Draw(SDL_Window* window);
+		
+		Camera* getCamera();
 };
 
 #endif

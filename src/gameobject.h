@@ -19,7 +19,7 @@ class GameObject {
 		~GameObject();
 
 		GameObject setPosition(const Vector &position);
-		Vector getPosition();
+		Vector *getPosition();
 		
 		GameObject setSize(const Vector &size);
 		Vector getSize();

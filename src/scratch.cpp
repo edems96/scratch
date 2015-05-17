@@ -24,7 +24,7 @@ Scratch::~Scratch() {
 	Log("~Scratch()");
 	
 	SDL_GL_DeleteContext(mGLContext);
-	SDL_DestroyWindow(mWindow);
+	SDL_DestroyWindow(window);
 	SDL_Quit();
 }
 
@@ -36,18 +36,18 @@ void Scratch::Init() {
 		return;
 	}
 	
-	mWindow = SDL_CreateWindow(
+	window = SDL_CreateWindow(
 		TITLE,
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 		SCREEN_WIDTH, SCREEN_HEIGHT,
 		SDL_WINDOW_OPENGL | (fullscreen ? SDL_WINDOW_FULLSCREEN : 0) );
 
-	if( mWindow == NULL ) {
+	if( window == NULL ) {
 		SDLError("Failed to initialize window!");
 		return;
 	}
 	
-	mGLContext = SDL_GL_CreateContext(mWindow);
+	mGLContext = SDL_GL_CreateContext(window);
 	
 	if( mGLContext == NULL ) {
 		SDLError("Failed to initialize OpenGL Context!");
@@ -56,8 +56,16 @@ void Scratch::Init() {
 	
 	InitOpenGL();
 	
-	background = new Background(SCREEN_WIDTH, SCREEN_HEIGHT);
+	player = new Player(Vector(SCREEN_WIDTH/2.0f, SCREEN_HEIGHT/2.0f, 0));
 	
+	Sphere s1(Vector(), 10);
+	Sphere s2(Vector(11, 0, 0), 1);
+	
+	if( Collision::sphereSphere(s1, s2) )
+		Log("COLL");
+	else
+		Log("No COLL");
+
 	running = true;
 	Run();
 }
@@ -65,17 +73,18 @@ void Scratch::Init() {
 void Scratch::InitOpenGL() {
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	
+	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	
-	glOrtho(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, 0, 1);
+	gluPerspective(45, SCREEN_WIDTH / SCREEN_HEIGHT, 1.0f, 500.0f);
 	
 	glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 	
-	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-	
 	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_DEPTH_TEST);
 	//glEnable(GL_BLEND);
 }
 
@@ -91,7 +100,7 @@ void Scratch::Run() {
 		Update();
 		Draw();
 		
-		SDL_GL_SwapWindow(mWindow);
+		SDL_GL_SwapWindow(window);
 		
 		if( 1000.0f / MAX_FPS > ( SDL_GetTicks() - time ) )
 			SDL_Delay( 1000.0f / MAX_FPS - ( SDL_GetTicks() - time ) );
@@ -110,6 +119,14 @@ void Scratch::HandleEvent(SDL_Event event) {
 					case SDLK_ESCAPE: running = false; break;
 				}
 				break;
+				
+			case SDL_MOUSEBUTTONDOWN:
+				if( !player->getCamera()->isMouseInScreen() ) {
+					SDL_ShowCursor(SDL_DISABLE);
+					player->getCamera()->setMouseInScreen(true);
+				}
+					
+				break;
 		}
 		
 	}
@@ -117,16 +134,81 @@ void Scratch::HandleEvent(SDL_Event event) {
 }
 
 void Scratch::Update() {
-	
+	player->Update();
 }
 
 void Scratch::Draw() {
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 	
-	background->Draw();
+	player->Draw(window);
+	
+	int size = 10;
+	glTranslatef(0, 0, -10);
+	glBegin(GL_QUADS);
+                //front face
+                //glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,difamb);
+                glNormal3f(0.0,0.0,1.0);
+                glVertex3f(size/2,size/2,size/2);
+                glVertex3f(-size/2,size/2,size/2);
+                glVertex3f(-size/2,-size/2,size/2);
+                glVertex3f(size/2,-size/2,size/2);
+ 
+                //left face
+                glNormal3f(-1.0,0.0,0.0);
+                glVertex3f(-size/2,size/2,size/2);
+                glVertex3f(-size/2,size/2,-size/2);
+                glVertex3f(-size/2,-size/2,-size/2);
+                glVertex3f(-size/2,-size/2,size/2);
+ 
+                //back face
+                glNormal3f(0.0,0.0,-1.0);
+                glVertex3f(size/2,size/2,-size/2);
+                glVertex3f(-size/2,size/2,-size/2);
+                glVertex3f(-size/2,-size/2,-size/2);
+                glVertex3f(size/2,-size/2,-size/2);
+ 
+                //right face
+                glNormal3f(1.0,0.0,0.0);
+                glVertex3f(size/2,size/2,-size/2);
+                glVertex3f(size/2,size/2,size/2);
+                glVertex3f(size/2,-size/2,size/2);
+                glVertex3f(size/2,-size/2,-size/2);
+ 
+                //top face
+                glNormal3f(0.0,1.0,0.0);
+                glVertex3f(size/2,size/2,size/2);
+                glVertex3f(-size/2,size/2,size/2);
+                glVertex3f(-size/2,size/2,-size/2);
+                glVertex3f(size/2,size/2,-size/2);
+ 
+                //bottom face
+                glNormal3f(0.0,-1.0,0.0);
+                glVertex3f(size/2,-size/2,size/2);
+                glVertex3f(-size/2,-size/2,size/2);
+                glVertex3f(-size/2,-size/2,-size/2);
+                glVertex3f(size/2,-size/2,-size/2);
+        glEnd();
 }
 
+SDL_Window* Scratch::getWindow() {
+	return window;
+}
+
+int Scratch::getScreenWidth() {
+	int width;
+	SDL_GetWindowSize(window, &width, NULL);
+	
+	return width;
+}
+
+int Scratch::getScreenHeight() {
+	int height;
+	SDL_GetWindowSize(window, NULL, &height);
+	
+	return height;
+}
+ 
 void Scratch::Log(const char* str) {
 	printf("Log: %s\n", str);
 }

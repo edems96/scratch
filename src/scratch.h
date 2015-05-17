@@ -9,9 +9,13 @@
 
 // GL Sources
 #include <GL/gl.h>
+#include <GL/Glu.h>
 
 // Game Sources
-#include "background.h"
+#include "camera.h"
+#include "player.h"
+#include "collision.h"
+#include "sphere.h"
 
 #define TITLE "Scratch"
 #define MAX_FPS 60
@@ -21,14 +25,15 @@ using namespace std;
 typedef unsigned int uint;
 
 class Scratch {
+	
 	private:
 		uint SCREEN_WIDTH, SCREEN_HEIGHT;
 		bool fullscreen, running;
 		
-		SDL_Window *mWindow;
+		SDL_Window *window;
 		SDL_GLContext mGLContext;
 		
-		Background *background;
+		Player *player;
 		
 		void Init();
 		void InitOpenGL();
@@ -47,6 +52,10 @@ class Scratch {
 		Scratch(uint width, uint height, bool fullscreen);
 		~Scratch();
 		
+		SDL_Window *getWindow();
+		
+		int getScreenWidth();
+		int getScreenHeight();
 };
 
 #endif

@@ -6,21 +6,15 @@
 
 class Vector {
 	
-	private:
-		float x, y;
-		
 	public:
+		float x, y, z;
+		
 		Vector();
-		Vector(float x, float y);
+		Vector(float x, float y, float z);
 		Vector(const Vector &vector);
 		
-		float getX();
-		float getY();
-		
-		Vector set(float x, float y);
+		Vector set(float x, float y, float z);
 		Vector set(const Vector &vector);
-		Vector setX(float x);
-		Vector setY(float y);
 		
 		Vector operator+(const Vector &vector);
 		Vector operator-(const Vector &vector);
@@ -35,11 +29,12 @@ class Vector {
 		bool operator==(const Vector &vector);
 		
 		float length();
+		float lengthSquare();
 		
 		Vector normalize();
 		
-		std::string toString();
-		const char* toStr();
+		static float distance(Vector v1, Vector v2);
+		static float distanceSquare(Vector v1, Vector v2);
 };
 
 #endif

@@ -1,7 +1,12 @@
 #include "player.h"
 
-Player::Player() {
+Player::Player(const Vector &position) {
+	setPosition(position);
 	
+	camera.setMoveVelocity(0.2f)->setMouseVelocity(0.2);
+	
+	health = 0;
+	speed = 0;
 }
 
 Player::~Player() {
@@ -9,17 +14,30 @@ Player::~Player() {
 }
 
 Player Player::setHealth(const int health) {
-	mHealth = health; return *this;
+	this->health = health; return *this;
 }
 
 int Player::getHealth() {
-	return mHealth;
+	return health;
 }
 
 Player Player::setSpeed(const float speed) {
-	mSpeed = speed; return *this;
+	this->speed = speed; return *this;
 }
 
 float Player::getSpeed() {
-	return mSpeed;
+	return speed;
+}
+
+void Player::Update() {
+	
+}
+
+void Player::Draw(SDL_Window* window) {
+	camera.Control(window);
+	camera.Update();
+}
+
+Camera* Player::getCamera() {
+	return &camera;
 }
