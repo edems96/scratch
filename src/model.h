@@ -5,52 +5,66 @@
 #include <cstdlib>
 #include <cstring>
 
+#include <GL/gl.h>
+
 #include <string>
+#include <vector>
+
+#include "texture.h"
 
 using namespace std;
 
 typedef unsigned int uint;
+typedef unsigned short ushort;
 
-struct Coordinate {
-	float x, y, z;
-	Coordinate(float x, float y, float z) : x(x), y(y), z(z) {}
-};
-
-struct Face {
-	int facen;
-	bool four;
-	
-	
-};
-
-struct Material {
-	string name;
-	float alpha, ni, ns;
-	
-	float dif[3], amb[3], spec[3];
-	int illum;
-	int texture;
-	
+struct Vertex {
+	float x, y, z; // w
 };
 
 struct TextureCoordinate {
-	float u, v;
-	TextureCoordinate(float u, float v) : u(u), v(v) {}
+	float u, v; // w
+};
+
+struct Normal {
+	float x, y, z;
+};
+
+struct Face {
+	bool quad;
+	bool hasTextureCoordinate, hasNormal;
+	uint material;
+	
+	uint vertex[4];
+	uint texture[4];
+	uint normal[4];
+};
+
+struct Material {
+	char name[64];
+	
+	float Ka[3]; // ambient color 
+	float Kd[3]; // diffuse color
+	float Ks[3]; // specular color
+	float Ns; // specular exponent
+	float d; // dissolved or Tr
+	uint illum; // illumination models
+	
+	char map_Kd[64];
 };
 
 class Model {
 	
 	private:
-		Coordinate *vertex;
-		uint vertexCount;
+		GLuint model;
 		
 	public:
+		static Model *loadFromFile(const char* path);
+		
 		Model();
+		Model(GLuint model);
 		
-		static Model* loadFromFile(const char* path);
-		
-		void addVertex(const Coordinate *vertex);
-		
+		void Draw();
+			
 };
 
 #endif

@@ -16,7 +16,7 @@ class Texture {
 		GLuint mImage;
 		
 	public:
-		static Texture *loadFromFile(const char *path);
+		static Texture* loadFromFile(const char *path);
 		
 		Texture();
 		Texture(GLuint image);

@@ -58,14 +58,10 @@ void Scratch::Init() {
 	
 	player = new Player(Vector(SCREEN_WIDTH/2.0f, SCREEN_HEIGHT/2.0f, 0));
 	
-	Sphere s1(Vector(), 10);
-	Sphere s2(Vector(11, 0, 0), 1);
-	
-	if( Collision::sphereSphere(s1, s2) )
-		Log("COLL");
-	else
-		Log("No COLL");
+	model = Model::loadFromFile("res/test1.model");
 
+	Log("gooo??");
+	
 	running = true;
 	Run();
 }
@@ -142,53 +138,7 @@ void Scratch::Draw() {
 	glLoadIdentity();
 	
 	player->Draw(window);
-	
-	int size = 10;
-	glTranslatef(0, 0, -10);
-	glBegin(GL_QUADS);
-                //front face
-                //glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,difamb);
-                glNormal3f(0.0,0.0,1.0);
-                glVertex3f(size/2,size/2,size/2);
-                glVertex3f(-size/2,size/2,size/2);
-                glVertex3f(-size/2,-size/2,size/2);
-                glVertex3f(size/2,-size/2,size/2);
- 
-                //left face
-                glNormal3f(-1.0,0.0,0.0);
-                glVertex3f(-size/2,size/2,size/2);
-                glVertex3f(-size/2,size/2,-size/2);
-                glVertex3f(-size/2,-size/2,-size/2);
-                glVertex3f(-size/2,-size/2,size/2);
- 
-                //back face
-                glNormal3f(0.0,0.0,-1.0);
-                glVertex3f(size/2,size/2,-size/2);
-                glVertex3f(-size/2,size/2,-size/2);
-                glVertex3f(-size/2,-size/2,-size/2);
-                glVertex3f(size/2,-size/2,-size/2);
- 
-                //right face
-                glNormal3f(1.0,0.0,0.0);
-                glVertex3f(size/2,size/2,-size/2);
-                glVertex3f(size/2,size/2,size/2);
-                glVertex3f(size/2,-size/2,size/2);
-                glVertex3f(size/2,-size/2,-size/2);
- 
-                //top face
-                glNormal3f(0.0,1.0,0.0);
-                glVertex3f(size/2,size/2,size/2);
-                glVertex3f(-size/2,size/2,size/2);
-                glVertex3f(-size/2,size/2,-size/2);
-                glVertex3f(size/2,size/2,-size/2);
- 
-                //bottom face
-                glNormal3f(0.0,-1.0,0.0);
-                glVertex3f(size/2,-size/2,size/2);
-                glVertex3f(-size/2,-size/2,size/2);
-                glVertex3f(-size/2,-size/2,-size/2);
-                glVertex3f(size/2,-size/2,-size/2);
-        glEnd();
+	model->Draw();
 }
 
 SDL_Window* Scratch::getWindow() {

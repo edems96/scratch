@@ -12,7 +12,7 @@ Texture::~Texture() {
 	glDeleteTextures(1, array);
 }
 
-Texture *Texture::loadFromFile(const char *path) {
+Texture* Texture::loadFromFile(const char *path) {
 	SDL_Surface *image;
 	image = IMG_Load(path);
 	

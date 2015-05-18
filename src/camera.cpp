@@ -29,15 +29,15 @@ void Camera::move(float direction) {
 	
 	position.x -= sin(radian) * moveVelocity;
 	position.z -= cos(radian) * moveVelocity;
-	printf("position: %f %f %f\n", position.x, position.y, position.z);
-	printf("pitch: %f yaw: %f\n", pitch, yaw);
+	/* printf("position: %f %f %f\n", position.x, position.y, position.z);
+	printf("pitch: %f yaw: %f\n", pitch, yaw); */
 }
 
 void Camera::moveUp(float direction) {
 	float radian = (pitch + direction) * M_PI / 180.0f;
 	
 	position.y += sin(radian) * moveVelocity;
-	printf("moveUp\n");
+	//printf("moveUp\n");
 }
 
 void Camera::Control(SDL_Window *window) {
@@ -56,7 +56,7 @@ void Camera::Control(SDL_Window *window) {
 		pitch += mouseVelocity * (midY - y);
 		yaw += mouseVelocity * (midX - x);
 		
-		printf("mv: %f\n", mouseVelocity);
+		//printf("mv: %f\n", mouseVelocity);
 		
 		lock();
 		

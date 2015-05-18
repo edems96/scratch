@@ -16,6 +16,7 @@
 #include "player.h"
 #include "collision.h"
 #include "sphere.h"
+#include "model.h"
 
 #define TITLE "Scratch"
 #define MAX_FPS 60
@@ -34,6 +35,7 @@ class Scratch {
 		SDL_GLContext mGLContext;
 		
 		Player *player;
+		Model *model;
 		
 		void Init();
 		void InitOpenGL();
