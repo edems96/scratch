@@ -17,6 +17,10 @@ class Plane {
 		
 		Vector getNormal();
 		Vector getEdge(uint n);
+		
+		Plane& setNormal(const Vector vector);
+		Plane& setEdge(uint n, const Vector vector);
+		
 };
 
 #endif

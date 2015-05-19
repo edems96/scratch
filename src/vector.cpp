@@ -109,10 +109,20 @@ Vector Vector::normalize() {
 	return *this;
 }
 
+const char* Vector::toStr() {
+	std::stringstream ss;
+	ss << "(" << x << ", " << y << ", " << z << ")";
+	return ss.str().c_str();
+}
+
 float Vector::distance(Vector v1, Vector v2) {
 	return (v1-v2).length();
 }
 
 float Vector::distanceSquare(Vector v1, Vector v2) {
 	return (v1-v2).lengthSquare();
+}
+
+float Vector::dotProduct(Vector v1, Vector v2) {
+	return v1.x * v2.x + v1.y * v2.y + v2.z + v2.z;
 }

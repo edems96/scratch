@@ -1,7 +1,7 @@
 #include "scratch.h"
 
 Scratch::Scratch(uint width, uint height) {
-	Log("Scratch()");
+	Utils::Log("Scratch()");
 	
 	this->SCREEN_WIDTH = width;
 	this->SCREEN_HEIGHT = height;
@@ -11,7 +11,7 @@ Scratch::Scratch(uint width, uint height) {
 }
 
 Scratch::Scratch(uint width, uint height, bool fullscreen) {
-	Log("Scratch()");
+	Utils::Log("Scratch()");
 	
 	this->SCREEN_WIDTH = width;
 	this->SCREEN_HEIGHT = height;
@@ -21,7 +21,7 @@ Scratch::Scratch(uint width, uint height, bool fullscreen) {
 }
 
 Scratch::~Scratch() {
-	Log("~Scratch()");
+	Utils::Log("~Scratch()");
 	
 	SDL_GL_DeleteContext(mGLContext);
 	SDL_DestroyWindow(window);
@@ -29,10 +29,10 @@ Scratch::~Scratch() {
 }
 
 void Scratch::Init() {
-	Log("Init()");
+	Utils::Log("Init()");
 	
 	if( SDL_Init(SDL_INIT_EVERYTHING) != 0 ) {
-		SDLError("Failed to initialize SDL!");
+		Utils::SDLError("Failed to initialize SDL!");
 		return;
 	}
 	
@@ -43,14 +43,14 @@ void Scratch::Init() {
 		SDL_WINDOW_OPENGL | (fullscreen ? SDL_WINDOW_FULLSCREEN : 0) );
 
 	if( window == NULL ) {
-		SDLError("Failed to initialize window!");
+		Utils::SDLError("Failed to initialize window!");
 		return;
 	}
 	
 	mGLContext = SDL_GL_CreateContext(window);
 	
 	if( mGLContext == NULL ) {
-		SDLError("Failed to initialize OpenGL Context!");
+		Utils::SDLError("Failed to initialize OpenGL Context!");
 		return;
 	}
 	
@@ -58,9 +58,9 @@ void Scratch::Init() {
 	
 	player = new Player(Vector(SCREEN_WIDTH/2.0f, SCREEN_HEIGHT/2.0f, 0));
 	
-	model = Model::loadFromFile("res/test1.model");
+	model = Model::loadFromFile("res/test2.model");
 
-	Log("gooo??");
+	Utils::Log("gooo??");
 	
 	running = true;
 	Run();
@@ -131,6 +131,19 @@ void Scratch::HandleEvent(SDL_Event event) {
 
 void Scratch::Update() {
 	player->Update();
+	
+	Sphere sphere(player->getCamera()->getPosition(), 10);
+	printf("sphere: %s\n", sphere.getOrigin().toStr());
+	
+	for(uint i = 0; i < model->getPlanesCount(); i++) {
+		
+		if( Collision::spherePlane(sphere, model->getPlanes()[i]) ) {
+			printf("coll\n");
+			player->getCamera()->setPosition(sphere.getOrigin());
+			printf("sphere mod: %s\n\n", sphere.getOrigin().toStr());
+		}
+		
+	} 
 }
 
 void Scratch::Draw() {
@@ -157,12 +170,4 @@ int Scratch::getScreenHeight() {
 	SDL_GetWindowSize(window, NULL, &height);
 	
 	return height;
-}
- 
-void Scratch::Log(const char* str) {
-	printf("Log: %s\n", str);
-}
-
-void Scratch::SDLError(const char *str) {
-	printf("SDL Error(%d): %s\n", SDL_GetError(), str);
 }

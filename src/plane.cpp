@@ -16,6 +16,14 @@ Vector Plane::getNormal() {
 	return normal;
 }
 
+Plane& Plane::setNormal(const Vector vector) {
+	normal.set(vector); return *this;
+}
+
 Vector Plane::getEdge(uint n) {
 	return edges[n];
+}
+
+Plane& Plane::setEdge(uint n, const Vector vector) {
+	edges[n].set(vector); return *this;
 }

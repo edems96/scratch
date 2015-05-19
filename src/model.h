@@ -11,6 +11,8 @@
 #include <vector>
 
 #include "texture.h"
+#include "utils.h"
+#include "plane.h"
 
 using namespace std;
 
@@ -57,6 +59,9 @@ class Model {
 	private:
 		GLuint model;
 		
+		Plane *planes;
+		uint planes_count;
+		
 	public:
 		static Model *loadFromFile(const char* path);
 		
@@ -64,6 +69,10 @@ class Model {
 		Model(GLuint model);
 		
 		void Draw();
+		void setPlanes(Plane *planes, uint count);
+		
+		Plane* getPlanes();
+		uint getPlanesCount();
 			
 };
 

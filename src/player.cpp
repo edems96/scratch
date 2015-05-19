@@ -13,6 +13,14 @@ Player::~Player() {
 	
 }
 
+Player Player::setPosition(const Vector &position) {
+	this->position.set(position); return *this;
+}
+
+Vector Player::getPosition() {
+	return position;
+}
+
 Player Player::setHealth(const int health) {
 	this->health = health; return *this;
 }

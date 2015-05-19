@@ -7,13 +7,17 @@
 
 #include <GL/GL.h>
 
-#include "gameobject.h"
 #include "camera.h"
+#include "texture.h"
+#include "vector.h"
 
-class Player : GameObject {
+class Player {
 	
 	private:
 		Camera camera;
+		Texture texture;
+		
+		Vector position;
 		
 		int health;
 		float speed;
@@ -21,6 +25,9 @@ class Player : GameObject {
 	public:
 		Player(const Vector &position);
 		~Player();
+		
+		Player setPosition(const Vector &position);
+		Vector getPosition();
 		
 		Player setHealth(const int health);
 		int getHealth();

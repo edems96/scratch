@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <string>
+#include <sstream>
 
 class Vector {
 	
@@ -33,8 +34,11 @@ class Vector {
 		
 		Vector normalize();
 		
+		const char* toStr();
+		
 		static float distance(Vector v1, Vector v2);
 		static float distanceSquare(Vector v1, Vector v2);
+		static float dotProduct(Vector v1, Vector v2);
 };
 
 #endif

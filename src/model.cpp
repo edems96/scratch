@@ -2,10 +2,12 @@
 
 Model::Model() {
 	model = 0;
+	planes_count = 0;
 }
 
 Model::Model(GLuint model) {
 	this->model = model;
+	planes_count = 0;
 }
 
 Model *Model::loadFromFile(const char* path) {
@@ -37,18 +39,59 @@ Model *Model::loadFromFile(const char* path) {
 	fread(&c_face, sizeof(uint), 1, f);
 	fread(&c_material, sizeof(uint), 1, f);
 	
+	/*
 	printf("Vertex count: %d\n", c_vertex);
 	printf("Texture coordinate count: %d\n", c_textureCoordinate);
 	printf("Normal count: %d\n", c_normal);
 	printf("Face count: %d\n", c_face);
 	printf("Material count: %d\n", c_material);
+	*/
 	
+	// allocation
 	Vertex* vertexes = (Vertex*) malloc(sizeof(Vertex) * c_vertex);
+	
+	if( vertexes == NULL ) {
+		Utils::Error("Failed to allocate memory for .model vertexes: %s\n", path);
+		return NULL;
+	}
+	
 	TextureCoordinate* textureCoordinates = (TextureCoordinate*) malloc(sizeof(TextureCoordinate) * c_textureCoordinate);
+	
+	if( textureCoordinates == NULL ) {
+		Utils::Error("Failed to allocate memory for .model texture coordinates: %s\n", path);
+		return NULL;
+	}
+	
 	Normal* normals = (Normal*) malloc(sizeof(Normal) * c_normal);
+	
+	if( normals == NULL ) {
+		Utils::Error("Failed to allocate memory for .model normals: %s\n", path);
+		return NULL;
+	}
+	
 	Face* faces = (Face*) malloc(sizeof(Face) * c_face);
+	
+	if( faces == NULL ) {
+		Utils::Error("Failed to allocate memory for .model faces: %s\n", path);
+		return NULL;
+	}
+		
 	Material* materials = (Material*) malloc(sizeof(Material) * c_material);
 	
+	if( materials == NULL ) {
+		Utils::Error("Failed to allocate memory for .model materials: %s\n", path);
+		return NULL;
+	}
+	
+	Plane* planes = (Plane*) malloc(sizeof(Plane) * c_face);
+	
+	if( planes == NULL ) {
+		Utils::Error("Failed to allocate memory for .model planes: %s\n", path);
+		return NULL;
+	}
+	
+	
+	// reading
 	if( fread(vertexes, sizeof(Vertex), c_vertex, f) != c_vertex ) {
 		printf("Failed to read vertexes from .model file: %s\n", path);
 		return NULL;
@@ -80,10 +123,10 @@ Model *Model::loadFromFile(const char* path) {
 	vector<char*> textureNames;
 	
 	for(uint i = 0; i < c_material; i++) {
-		string path = "res/";
-		path += materials[i].map_Kd;
+		string p = "res/";
+		p += materials[i].map_Kd;
 		
-		textures.push_back(Texture::loadFromFile(path.c_str()));
+		textures.push_back(Texture::loadFromFile(p.c_str()));
 		textureNames.push_back(materials[i].map_Kd);
 	}
 	
@@ -93,6 +136,11 @@ Model *Model::loadFromFile(const char* path) {
 	glNewList(num, GL_COMPILE);
 
 	for(uint i = 0; i < c_face; i++) {
+		
+		if( faces[i].hasNormal ) {
+			planes[i].setNormal(Vector(normals[faces[i].normal[0] - 1].x, normals[faces[i].normal[1] - 1].y, normals[faces[i].normal[2] - 1].z));
+			printf("setting normal: %f %f %f\n", normals[faces[i].normal[0] - 1].x, normals[faces[i].normal[1] - 1].y, normals[faces[i].normal[2] - 1].z);
+		}
 		
 		if( faces[i].material != 0 ) {
 			float diffuse[] = { materials[faces[i].material - 1].Kd[0], materials[faces[i].material - 1].Kd[1], materials[faces[i].material - 1].Kd[2], 1.0 };
@@ -122,7 +170,8 @@ Model *Model::loadFromFile(const char* path) {
 			glBegin(GL_QUADS);
 				
 				for(uint j = 0; j < 4; j++) {
-					
+					planes[i].setEdge(j, Vector(vertexes[faces[i].vertex[j] - 1].x, vertexes[faces[i].vertex[j] - 1].y, vertexes[faces[i].vertex[j] - 1].z));
+
 					if( faces[i].hasTextureCoordinate )
 						glTexCoord2f(textureCoordinates[faces[i].texture[j] - 1].u, textureCoordinates[faces[i].texture[j] - 1].v);
 					
@@ -137,6 +186,8 @@ Model *Model::loadFromFile(const char* path) {
 			glBegin(GL_TRIANGLES);
 			
 				for(uint j = 0; j < 3; j++) {
+					planes[i].setEdge(j, Vector(vertexes[faces[i].vertex[j] - 1].x, vertexes[faces[i].vertex[j] - 1].y, vertexes[faces[i].vertex[j] - 1].z));
+
 					
 					if( faces[i].hasTextureCoordinate )
 						glTexCoord2f(textureCoordinates[faces[i].texture[j] - 1].u, textureCoordinates[faces[i].texture[j] - 1].v);
@@ -155,9 +206,31 @@ Model *Model::loadFromFile(const char* path) {
 	
 	glEndList();
 	
-	return new Model(num);
+	free(vertexes);
+	free(textureCoordinates);
+	free(normals);
+	free(faces);
+	free(materials);
+	
+	Model *model = new Model(num);
+	model->setPlanes(planes, c_face);
+	
+	return model;
 }
 
 void Model::Draw() {
 	glCallList(model);
+}
+
+void Model::setPlanes(Plane *planes, uint count) {
+	this->planes = planes;
+	planes_count = count;
+}
+
+uint Model::getPlanesCount() {
+	return planes_count;
+}
+
+Plane* Model::getPlanes() {
+	return planes;
 }

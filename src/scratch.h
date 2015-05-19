@@ -12,6 +12,7 @@
 #include <GL/Glu.h>
 
 // Game Sources
+#include "utils.h"
 #include "camera.h"
 #include "player.h"
 #include "collision.h"
@@ -45,10 +46,7 @@ class Scratch {
 		
 		void Update();
 		void Draw();
-		
-		void Log(const char* str);
-		void SDLError(const char *str);
-		
+
 	public:
 		Scratch(uint width, uint height);
 		Scratch(uint width, uint height, bool fullscreen);
