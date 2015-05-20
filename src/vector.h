@@ -41,6 +41,7 @@ class Vector {
 		static float distance(Vector v1, Vector v2);
 		static float distanceSquare(Vector v1, Vector v2);
 		static float dotProduct(const Vector v1, const Vector v2);
+		static Vector crossProduct(const Vector v1, const Vector v2);
 };
 
 #endif

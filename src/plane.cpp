@@ -4,11 +4,11 @@ Plane::Plane() {
 	
 }
 
-Plane::Plane(Vector normal, Vector edges[4]) {
+Plane::Plane(Vector normal, Vector vertices[4]) {
 	this->normal.set(normal);
 	
 	for(uint i = 0; i < 4; i++) {
-		this->edges[i].set(edges[i]);
+		this->vertices[i].set(vertices[i]);
 	}
 }
 
@@ -24,10 +24,10 @@ Plane& Plane::setNormal(const Vector normal) {
 	this->normal.set(normal); return *this;
 }
 
-Vector Plane::getEdge(uint n) {
-	return edges[n];
+Vector Plane::getVertex(uint n) {
+	return vertices[n];
 }
 
-Plane& Plane::setEdge(uint n, const Vector vector) {
-	edges[n].set(vector); return *this;
+Plane& Plane::setVertex(uint n, const Vector vector) {
+	vertices[n].set(vector); return *this;
 }

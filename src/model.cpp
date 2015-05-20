@@ -39,11 +39,12 @@ Model *Model::loadFromFile(const char* path) {
 	fread(&c_face, sizeof(uint), 1, f);
 	fread(&c_material, sizeof(uint), 1, f);
 	
+	/*
 	printf("Vertex count: %d\n", c_vertex);
 	printf("Texture coordinate count: %d\n", c_textureCoordinate);
 	printf("Normal count: %d\n", c_normal);
 	printf("Face count: %d\n", c_face);
-	printf("Material count: %d\n", c_material);
+	printf("Material count: %d\n", c_material); */
 	
 	// allocation
 	Vertex* vertexes = (Vertex*) malloc(sizeof(Vertex) * c_vertex);
@@ -140,7 +141,7 @@ Model *Model::loadFromFile(const char* path) {
 		
 		if( faces[i].quad && faces[i].hasNormal ) {
 			planes[i].setNormal(Vector(normals[faces[i].normal[0] - 1].x, normals[faces[i].normal[1] - 1].y, normals[faces[i].normal[2] - 1].z));
-			printf("setting normal: %f %f %f\n", normals[faces[i].normal[0] - 1].x, normals[faces[i].normal[1] - 1].y, normals[faces[i].normal[2] - 1].z);
+			//printf("setting normal: %f %f %f\n", normals[faces[i].normal[0] - 1].x, normals[faces[i].normal[1] - 1].y, normals[faces[i].normal[2] - 1].z);
 		}
 		
 		if( faces[i].material != 0 ) {

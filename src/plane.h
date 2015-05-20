@@ -9,19 +9,19 @@ class Plane {
 	
 	private:
 		Vector normal;
-		Vector edges[4];
+		Vector vertices[4];
 		
 	public:
 		Plane();
-		Plane(Vector normal, Vector edges[4]);
+		Plane(Vector normal, Vector vertices[4]);
 		
 		Vector* getEdges();
 		
 		Vector getNormal();
-		Vector getEdge(uint n);
+		Vector getVertex(uint n);
 		
 		Plane& setNormal(const Vector normal);
-		Plane& setEdge(uint n, const Vector vector);
+		Plane& setVertex(uint n, const Vector vector);
 		
 };
 

@@ -11,8 +11,13 @@ bool Collision::rayPlane(Vector start, Vector direction, Plane plane, float *dis
 	if( t < 0 )
 		return false;
 	
-	Vector cPoint(start + direction * t);
+	printf("s: %f %f %f\n", start.x, start.y, start.z);
+	printf("d: %f %f %f\n", direction.x, direction.y, direction.z);
+	printf("n: %f %f %f\n", plane.getNormal().x, plane.getNormal().y, plane.getNormal().z);
+	printf("t: %f\n\n", t);
 	
+	Vector cPoint(start + direction * t);
+
 	float area1 = abs(triangleArea(plane.getEdge(0), plane.getEdge(1), plane.getEdge(2)) - (
 			triangleArea(plane.getEdge(0), plane.getEdge(1), cPoint) +
 			triangleArea(plane.getEdge(0), plane.getEdge(2), cPoint) +
@@ -64,7 +69,7 @@ bool Collision::sphereSphere(Sphere &s1, Sphere &s2) {
 }
 
 bool Collision::spherePlane(Sphere &sphere, Plane plane) {
-	float distance1, distance2;
+	float distance1 = 0, distance2 = 0;
 	
 	if( 
 		rayPlane(sphere.getOrigin(), plane.getNormal() * (-1), plane, &distance1, NULL) ||
@@ -80,8 +85,11 @@ bool Collision::spherePlane(Sphere &sphere, Plane plane) {
 		else
 			move -= plane.getNormal() * (sphere.getRadius() - distance2);
 		
+		printf("in1: %f %f %f\n", sphere.getOrigin().x, sphere.getOrigin().y, sphere.getOrigin().z);
+		
 		sphere.setOrigin(move);
 
+		printf("sp1: %f %f %f\n", sphere.getOrigin().x, sphere.getOrigin().y, sphere.getOrigin().z);
 		return true;
 	}
 	return false;

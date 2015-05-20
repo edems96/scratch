@@ -130,7 +130,7 @@ void Scratch::HandleEvent(SDL_Event event) {
 void Scratch::Update() {
 	player->Update();
 	
-	Sphere sphere(player->getPosition(), 2);
+	Sphere sphere(player->getPosition(), 5);
 
 	for(uint i = 0; i < model->getPlanesCount(); i++) {
 		
