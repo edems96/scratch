@@ -13,20 +13,24 @@ bool Collision::rayPlane(Vector start, Vector direction, Plane plane, float *dis
 	
 	Vector cPoint(start + direction * t);
 	
-	float area = abs(triangleArea(plane.getEdge(0), plane.getEdge(1), plane.getEdge(2)) - (
+	float area1 = abs(triangleArea(plane.getEdge(0), plane.getEdge(1), plane.getEdge(2)) - (
 			triangleArea(plane.getEdge(0), plane.getEdge(1), cPoint) +
 			triangleArea(plane.getEdge(0), plane.getEdge(2), cPoint) +
 			triangleArea(plane.getEdge(1), plane.getEdge(2), cPoint)));
-			
-	if( area >= 0.3f ) {
-		area = abs(triangleArea(plane.getEdge(0), plane.getEdge(2), plane.getEdge(3)) - (
+	
+	float area2 = abs(triangleArea(plane.getEdge(0), plane.getEdge(2), plane.getEdge(3)) - (
 			triangleArea(plane.getEdge(0), plane.getEdge(2), cPoint) +
 			triangleArea(plane.getEdge(0), plane.getEdge(3), cPoint) +
 			triangleArea(plane.getEdge(2), plane.getEdge(3), cPoint)));
+			
+	/* if( area >= 0.3f ) {
+		
 		
 		if( area >= 0.3f )
 			return false;
-	}
+	} */
+	
+	if( area1 < 0.3f || area2 < 0.3f ) {
 
 	if( distance != NULL ) {
 		(*distance) = t;
@@ -36,6 +40,9 @@ bool Collision::rayPlane(Vector start, Vector direction, Plane plane, float *dis
 	}
 		
 	return true;
+	}
+	
+	return false;
 }
 
 bool Collision::sphereSphere(Sphere &s1, Sphere &s2) {

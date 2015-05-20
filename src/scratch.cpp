@@ -134,8 +134,10 @@ void Scratch::Update() {
 
 	for(uint i = 0; i < model->getPlanesCount(); i++) {
 		
-		if( Collision::spherePlane(sphere, model->getPlanes()[i]) ) 
+		if( Collision::spherePlane(sphere, model->getPlanes()[i]) ) {
+			printf("COLL\n");
 			player->setPosition(sphere.getOrigin());
+		}
 		
 	} 
 }
