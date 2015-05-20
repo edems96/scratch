@@ -15,10 +15,12 @@ class Plane {
 		Plane();
 		Plane(Vector normal, Vector edges[4]);
 		
+		Vector* getEdges();
+		
 		Vector getNormal();
 		Vector getEdge(uint n);
 		
-		Plane& setNormal(const Vector vector);
+		Plane& setNormal(const Vector normal);
 		Plane& setEdge(uint n, const Vector vector);
 		
 };

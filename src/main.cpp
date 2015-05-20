@@ -2,7 +2,7 @@
 
 int main(int argc, char** args) {
 	
-	Scratch game(640, 480);
+	Scratch game(1024, 768);
 	
 	return 1;
 }

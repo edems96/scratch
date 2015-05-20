@@ -56,12 +56,10 @@ void Scratch::Init() {
 	
 	InitOpenGL();
 	
-	player = new Player(Vector(SCREEN_WIDTH/2.0f, SCREEN_HEIGHT/2.0f, 0));
+	player = new Player(Vector(0, 0, 0));
 	
-	model = Model::loadFromFile("res/test2.model");
+	model = Model::loadFromFile("res/test4.model");
 
-	Utils::Log("gooo??");
-	
 	running = true;
 	Run();
 }
@@ -132,16 +130,12 @@ void Scratch::HandleEvent(SDL_Event event) {
 void Scratch::Update() {
 	player->Update();
 	
-	Sphere sphere(player->getCamera()->getPosition(), 10);
-	printf("sphere: %s\n", sphere.getOrigin().toStr());
-	
+	Sphere sphere(player->getPosition(), 2);
+
 	for(uint i = 0; i < model->getPlanesCount(); i++) {
 		
-		if( Collision::spherePlane(sphere, model->getPlanes()[i]) ) {
-			printf("coll\n");
-			player->getCamera()->setPosition(sphere.getOrigin());
-			printf("sphere mod: %s\n\n", sphere.getOrigin().toStr());
-		}
+		if( Collision::spherePlane(sphere, model->getPlanes()[i]) ) 
+			player->setPosition(sphere.getOrigin());
 		
 	} 
 }

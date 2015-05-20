@@ -13,9 +13,9 @@ Vector::Vector(float x, float y, float z) {
 }
 
 Vector::Vector(const Vector &vector) {
-	this->x = vector.x;
-	this->y = vector.y;
-	this->z = vector.z;
+	x = vector.x;
+	y = vector.y;
+	z = vector.z;
 }
 
 Vector Vector::set(float x, float y, float z) {
@@ -34,6 +34,13 @@ Vector Vector::set(const Vector &vector) {
 	return *this;
 }
 
+Vector Vector::operator=(const Vector &vector) {
+	this->x = vector.x;
+	this->y = vector.y;
+	this->z = vector.z;
+	
+	return *this;
+}
 
 Vector Vector::operator+(const Vector &vector) {
 	return Vector(x + vector.x, y + vector.y, z + vector.z);
@@ -77,7 +84,7 @@ Vector Vector::operator*=(const float n) {
 
 Vector Vector::operator/=(const float n) {
 	if( n != 0 ) {
-		y /= n;
+		x /= n;
 		y /= n;
 		z /= n;
 	}
@@ -112,7 +119,8 @@ Vector Vector::normalize() {
 const char* Vector::toStr() {
 	std::stringstream ss;
 	ss << "(" << x << ", " << y << ", " << z << ")";
-	return ss.str().c_str();
+	printf("(%f, %f, %f);\n", x, y, z);
+	return "a"; //ss.str().c_str();
 }
 
 float Vector::distance(Vector v1, Vector v2) {
@@ -123,6 +131,6 @@ float Vector::distanceSquare(Vector v1, Vector v2) {
 	return (v1-v2).lengthSquare();
 }
 
-float Vector::dotProduct(Vector v1, Vector v2) {
-	return v1.x * v2.x + v1.y * v2.y + v2.z + v2.z;
+float Vector::dotProduct(const Vector v1, const Vector v2) {
+	return v1.x * v2.x + v1.y * v2.y + v1.z + v2.z;
 }

@@ -12,7 +12,7 @@ Model::Model(GLuint model) {
 
 Model *Model::loadFromFile(const char* path) {
 	FILE *f;
-	f = fopen(path, "r");
+	f = fopen(path, "rb");
 	
 	if( f == NULL ) {
 		printf("Failed to open model: %s! No such file or cannot open!\n", path);
@@ -39,13 +39,11 @@ Model *Model::loadFromFile(const char* path) {
 	fread(&c_face, sizeof(uint), 1, f);
 	fread(&c_material, sizeof(uint), 1, f);
 	
-	/*
 	printf("Vertex count: %d\n", c_vertex);
 	printf("Texture coordinate count: %d\n", c_textureCoordinate);
 	printf("Normal count: %d\n", c_normal);
 	printf("Face count: %d\n", c_face);
 	printf("Material count: %d\n", c_material);
-	*/
 	
 	// allocation
 	Vertex* vertexes = (Vertex*) malloc(sizeof(Vertex) * c_vertex);
@@ -123,6 +121,9 @@ Model *Model::loadFromFile(const char* path) {
 	vector<char*> textureNames;
 	
 	for(uint i = 0; i < c_material; i++) {
+		if( !materials[i].hasTexture )
+			continue;
+		
 		string p = "res/";
 		p += materials[i].map_Kd;
 		
@@ -137,7 +138,7 @@ Model *Model::loadFromFile(const char* path) {
 
 	for(uint i = 0; i < c_face; i++) {
 		
-		if( faces[i].hasNormal ) {
+		if( faces[i].quad && faces[i].hasNormal ) {
 			planes[i].setNormal(Vector(normals[faces[i].normal[0] - 1].x, normals[faces[i].normal[1] - 1].y, normals[faces[i].normal[2] - 1].z));
 			printf("setting normal: %f %f %f\n", normals[faces[i].normal[0] - 1].x, normals[faces[i].normal[1] - 1].y, normals[faces[i].normal[2] - 1].z);
 		}
@@ -155,7 +156,7 @@ Model *Model::loadFromFile(const char* path) {
 			
 			glColor3f(materials[faces[i].material - 1].Kd[0], materials[faces[i].material - 1].Kd[1], materials[faces[i].material - 1].Kd[2]);
 		
-			if( strlen(materials[faces[i].material - 1].map_Kd) ) {
+			if( materials[faces[i].material - 1].hasTexture ) {
 				glEnable(GL_TEXTURE_2D);
 				
 				for(uint j = 0; j < textures.size(); j++) {

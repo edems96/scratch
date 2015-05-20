@@ -13,29 +13,29 @@ bool Collision::rayPlane(Vector start, Vector direction, Plane plane, float *dis
 	
 	Vector cPoint(start + direction * t);
 	
-	float area1 = abs(triangleArea(plane.getEdge(0), plane.getEdge(1), plane.getEdge(2)) - (
+	float area = abs(triangleArea(plane.getEdge(0), plane.getEdge(1), plane.getEdge(2)) - (
 			triangleArea(plane.getEdge(0), plane.getEdge(1), cPoint) +
 			triangleArea(plane.getEdge(0), plane.getEdge(2), cPoint) +
 			triangleArea(plane.getEdge(1), plane.getEdge(2), cPoint)));
-		
-	float area2 = abs(triangleArea(plane.getEdge(0), plane.getEdge(2), plane.getEdge(3)) - (
+			
+	if( area >= 0.3f ) {
+		area = abs(triangleArea(plane.getEdge(0), plane.getEdge(2), plane.getEdge(3)) - (
 			triangleArea(plane.getEdge(0), plane.getEdge(2), cPoint) +
 			triangleArea(plane.getEdge(0), plane.getEdge(3), cPoint) +
 			triangleArea(plane.getEdge(2), plane.getEdge(3), cPoint)));
-
 		
-	if( area1 < 0.3f || area2 < 0.3f ) {
-		if( distance != NULL ) {
-			(*distance) = t;
-			
-			if( collisionPoint != NULL )
-				collisionPoint->set(cPoint);
-		}
-		
-		return true;
+		if( area >= 0.3f )
+			return false;
 	}
-	
-	return false;
+
+	if( distance != NULL ) {
+		(*distance) = t;
+			
+		if( collisionPoint != NULL )
+			collisionPoint->set(cPoint);
+	}
+		
+	return true;
 }
 
 bool Collision::sphereSphere(Sphere &s1, Sphere &s2) {
@@ -57,34 +57,26 @@ bool Collision::sphereSphere(Sphere &s1, Sphere &s2) {
 }
 
 bool Collision::spherePlane(Sphere &sphere, Plane plane) {
-	float distance1 = 0, distance2 = 0;
+	float distance1, distance2;
 	
 	if( 
 		rayPlane(sphere.getOrigin(), plane.getNormal() * (-1), plane, &distance1, NULL) ||
-		rayPlane(sphere.getOrigin(), plane.getNormal(), plane.setNormal(plane.getNormal() * (-1)), &distance2, NULL)
-	) {
-		//printf("hey");
-		if( distance1 > sphere.getRadius() || distance2 > sphere.getRadius() ) 
+		rayPlane(sphere.getOrigin(), plane.getNormal(), Plane(plane.getNormal() * (-1), plane.getEdges()), &distance2, NULL) ) {
+
+		if( distance1 > sphere.getRadius() || distance2 > sphere.getRadius() )
 			return false;
-		
+	
 		Vector move(sphere.getOrigin());
 		
-		printf("dist1: %f <-> %f %d\n", distance1, sphere.getRadius(), distance1 > sphere.getRadius());
-		printf("dist2: %f <-> %f %d\n", distance2, sphere.getRadius(), distance2 > sphere.getRadius());
-		
-		if( distance1 > 0 ) {
+		if( distance1 > 0 )
 			move += plane.getNormal() * (sphere.getRadius() - distance1);
-			
-		} else {
+		else
 			move -= plane.getNormal() * (sphere.getRadius() - distance2);
-			
-		}
 		
 		sphere.setOrigin(move);
-		printf("sphere mod2: %s\n", sphere.getOrigin().toStr());
+
 		return true;
 	}
-	
 	return false;
 }
 

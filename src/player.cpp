@@ -14,11 +14,11 @@ Player::~Player() {
 }
 
 Player Player::setPosition(const Vector &position) {
-	this->position.set(position); return *this;
+	camera.setPosition(position); return *this;
 }
 
 Vector Player::getPosition() {
-	return position;
+	return camera.getPosition();
 }
 
 Player Player::setHealth(const int health) {

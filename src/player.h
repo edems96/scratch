@@ -17,8 +17,6 @@ class Player {
 		Camera camera;
 		Texture texture;
 		
-		Vector position;
-		
 		int health;
 		float speed;
 		

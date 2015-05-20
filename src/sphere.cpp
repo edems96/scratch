@@ -9,7 +9,7 @@ Sphere::Sphere(Vector origin, float radius) {
 	this->radius = radius;
 }
 
-Sphere* Sphere::setOrigin(const Vector vector) {
+Sphere* Sphere::setOrigin(const Vector origin) {
 	this->origin.set(origin); return this;
 }		
 

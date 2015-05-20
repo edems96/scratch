@@ -4,6 +4,7 @@
 #include <cmath>
 #include <string>
 #include <sstream>
+#include <cstdio>
 
 class Vector {
 	
@@ -17,6 +18,7 @@ class Vector {
 		Vector set(float x, float y, float z);
 		Vector set(const Vector &vector);
 		
+		Vector operator=(const Vector &vector);
 		Vector operator+(const Vector &vector);
 		Vector operator-(const Vector &vector);
 		Vector operator*(const float n);
@@ -38,7 +40,7 @@ class Vector {
 		
 		static float distance(Vector v1, Vector v2);
 		static float distanceSquare(Vector v1, Vector v2);
-		static float dotProduct(Vector v1, Vector v2);
+		static float dotProduct(const Vector v1, const Vector v2);
 };
 
 #endif

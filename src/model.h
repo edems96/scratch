@@ -32,13 +32,17 @@ struct Normal {
 };
 
 struct Face {
-	bool quad;
-	bool hasTextureCoordinate, hasNormal;
+	bool quad, 
+		hasTextureCoordinate, 
+		hasNormal;
+	
 	uint material;
 	
 	uint vertex[4];
 	uint texture[4];
 	uint normal[4];
+	
+	Face() : quad(false), hasTextureCoordinate(false), hasNormal(false), material(0) {}
 };
 
 struct Material {
@@ -51,7 +55,10 @@ struct Material {
 	float d; // dissolved or Tr
 	uint illum; // illumination models
 	
+	bool hasTexture;
 	char map_Kd[64];
+	
+	Material() : hasTexture(false) {}
 };
 
 class Model {
