@@ -172,7 +172,7 @@ Model *Model::loadFromFile(const char* path) {
 			glBegin(GL_QUADS);
 				
 				for(uint j = 0; j < 4; j++) {
-					planes[i].setEdge(j, Vector(vertexes[faces[i].vertex[j] - 1].x, vertexes[faces[i].vertex[j] - 1].y, vertexes[faces[i].vertex[j] - 1].z));
+					planes[i].setVertex(j, Vector(vertexes[faces[i].vertex[j] - 1].x, vertexes[faces[i].vertex[j] - 1].y, vertexes[faces[i].vertex[j] - 1].z));
 
 					if( faces[i].hasTextureCoordinate )
 						glTexCoord2f(textureCoordinates[faces[i].texture[j] - 1].u, textureCoordinates[faces[i].texture[j] - 1].v);
@@ -188,7 +188,7 @@ Model *Model::loadFromFile(const char* path) {
 			glBegin(GL_TRIANGLES);
 			
 				for(uint j = 0; j < 3; j++) {
-					planes[i].setEdge(j, Vector(vertexes[faces[i].vertex[j] - 1].x, vertexes[faces[i].vertex[j] - 1].y, vertexes[faces[i].vertex[j] - 1].z));
+					planes[i].setVertex(j, Vector(vertexes[faces[i].vertex[j] - 1].x, vertexes[faces[i].vertex[j] - 1].y, vertexes[faces[i].vertex[j] - 1].z));
 
 					
 					if( faces[i].hasTextureCoordinate )

@@ -12,8 +12,8 @@ Plane::Plane(Vector normal, Vector vertices[4]) {
 	}
 }
 
-Vector* Plane::getEdges() {
-	return edges;
+Vector* Plane::getVertices() {
+	return vertices;
 }
 
 Vector Plane::getNormal() {

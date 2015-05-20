@@ -15,7 +15,7 @@ class Plane {
 		Plane();
 		Plane(Vector normal, Vector vertices[4]);
 		
-		Vector* getEdges();
+		Vector* getVertices();
 		
 		Vector getNormal();
 		Vector getVertex(uint n);

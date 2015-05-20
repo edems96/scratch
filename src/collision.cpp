@@ -1,12 +1,55 @@
 #include "collision.h"
 
+bool Collision::rayTriangle(Vector start, Vector direction, Vector t1, Vector t2, Vector t3, float *distance) {
+	Vector e1 = t2 - t1;
+	Vector e2 = t3 - t1;
+	
+	Vector P = Vector::crossProduct(direction, e2);
+	float det = Vector::dotProduct(e1, P);
+	
+	if( det > -EPSILON && det < EPSILON )
+		return false;
+	
+	float inv_det = 1.0f / det;
+	
+	Vector T = start - t1;
+	
+	float u = Vector::dotProduct(T, P) * inv_det;
+	
+	if( u < 0.0f || u > 1.0f )
+		return false;
+	
+	Vector Q = T - e1;
+	
+	float v = Vector::dotProduct(direction, Q) * inv_det;
+	
+	if( v < 0.0f || u + v > 1.0f )
+		return false;
+	
+	float t = Vector::dotProduct(e2, Q) * inv_det;
+	
+	if( t > EPSILON ) {
+		*distance = t;
+		return true;
+	}
+	
+	return false;
+}
+
 bool Collision::rayPlane(Vector start, Vector direction, Plane plane, float *distance, Vector *collisionPoint) {
+	if( rayTriangle(start, direction, plane.getVertex(0), plane.getVertex(1), plane.getVertex(2), distance) )
+		return true;
+	
+	return rayTriangle(start, direction, plane.getVertex(0), plane.getVertex(2), plane.getVertex(3), distance);
+}
+
+/*bool Collision::rayPlane(Vector start, Vector direction, Plane plane, float *distance, Vector *collisionPoint) {
 	float a = Vector::dotProduct(plane.getNormal(), direction);
 	
 	if( a == 0 )
 		return false;
 	
-	float t = (Vector::dotProduct(plane.getNormal(), plane.getEdge(0)) - Vector::dotProduct(plane.getNormal(),  start)) / a;
+	float t = (Vector::dotProduct(plane.getNormal(), plane.getVertex(0)) - Vector::dotProduct(plane.getNormal(),  start)) / a;
 	
 	if( t < 0 )
 		return false;
@@ -18,22 +61,16 @@ bool Collision::rayPlane(Vector start, Vector direction, Plane plane, float *dis
 	
 	Vector cPoint(start + direction * t);
 
-	float area1 = abs(triangleArea(plane.getEdge(0), plane.getEdge(1), plane.getEdge(2)) - (
-			triangleArea(plane.getEdge(0), plane.getEdge(1), cPoint) +
-			triangleArea(plane.getEdge(0), plane.getEdge(2), cPoint) +
-			triangleArea(plane.getEdge(1), plane.getEdge(2), cPoint)));
+	float area1 = abs(triangleArea(plane.getVertex(0), plane.getVertex(1), plane.getVertex(2)) - (
+			triangleArea(plane.getVertex(0), plane.getVertex(1), cPoint) +
+			triangleArea(plane.getVertex(0), plane.getVertex(2), cPoint) +
+			triangleArea(plane.getVertex(1), plane.getVertex(2), cPoint)));
 	
-	float area2 = abs(triangleArea(plane.getEdge(0), plane.getEdge(2), plane.getEdge(3)) - (
-			triangleArea(plane.getEdge(0), plane.getEdge(2), cPoint) +
-			triangleArea(plane.getEdge(0), plane.getEdge(3), cPoint) +
-			triangleArea(plane.getEdge(2), plane.getEdge(3), cPoint)));
-			
-	/* if( area >= 0.3f ) {
+	float area2 = abs(triangleArea(plane.getVertex(0), plane.getVertex(2), plane.getVertex(3)) - (
+			triangleArea(plane.getVertex(0), plane.getVertex(2), cPoint) +
+			triangleArea(plane.getVertex(0), plane.getVertex(3), cPoint) +
+			triangleArea(plane.getVertex(2), plane.getVertex(3), cPoint)));
 		
-		
-		if( area >= 0.3f )
-			return false;
-	} */
 	
 	if( area1 < 0.3f || area2 < 0.3f ) {
 
@@ -48,7 +85,7 @@ bool Collision::rayPlane(Vector start, Vector direction, Plane plane, float *dis
 	}
 	
 	return false;
-}
+} */
 
 bool Collision::sphereSphere(Sphere &s1, Sphere &s2) {
 	float distance = Vector::distanceSquare(s1.getOrigin(), s2.getOrigin());
@@ -73,7 +110,7 @@ bool Collision::spherePlane(Sphere &sphere, Plane plane) {
 	
 	if( 
 		rayPlane(sphere.getOrigin(), plane.getNormal() * (-1), plane, &distance1, NULL) ||
-		rayPlane(sphere.getOrigin(), plane.getNormal(), Plane(plane.getNormal() * (-1), plane.getEdges()), &distance2, NULL) ) {
+		rayPlane(sphere.getOrigin(), plane.getNormal(), Plane(plane.getNormal() * (-1), plane.getVertices()), &distance2, NULL) ) {
 
 		if( distance1 > sphere.getRadius() || distance2 > sphere.getRadius() )
 			return false;
@@ -85,11 +122,11 @@ bool Collision::spherePlane(Sphere &sphere, Plane plane) {
 		else
 			move -= plane.getNormal() * (sphere.getRadius() - distance2);
 		
-		printf("in1: %f %f %f\n", sphere.getOrigin().x, sphere.getOrigin().y, sphere.getOrigin().z);
+		//printf("in1: %f %f %f\n", sphere.getOrigin().x, sphere.getOrigin().y, sphere.getOrigin().z);
 		
 		sphere.setOrigin(move);
 
-		printf("sp1: %f %f %f\n", sphere.getOrigin().x, sphere.getOrigin().y, sphere.getOrigin().z);
+		//printf("sp1: %f %f %f\n", sphere.getOrigin().x, sphere.getOrigin().y, sphere.getOrigin().z);
 		return true;
 	}
 	return false;
