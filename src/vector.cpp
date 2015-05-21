@@ -1,9 +1,9 @@
 #include "vector.h"
 
 Vector::Vector() {
-	x = 0;
-	y = 0;
-	z = 0;
+	x = 0.0f;
+	y = 0.0f;
+	z = 0.0f;
 }
 
 Vector::Vector(float x, float y, float z) {
@@ -94,6 +94,11 @@ Vector Vector::operator/=(const float n) {
 
 bool Vector::operator==(const Vector &vector) {
 	return x == vector.x && y == vector.y && z == vector.z;
+}
+
+bool Vector::operator!=(const Vector &vector) {
+	//return x != vector.x || y != vector.y || z != vector.z;
+	return !(x == vector.x && y == vector.y && z == vector.z);
 }
 
 float Vector::length() {

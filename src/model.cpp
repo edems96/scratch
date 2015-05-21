@@ -169,7 +169,7 @@ Model *Model::loadFromFile(const char* path) {
 		}
 		
 		if( faces[i].quad ) {
-			glBegin(GL_QUADS);
+			glBegin(GL_LINE_LOOP); // QUADS
 				
 				for(uint j = 0; j < 4; j++) {
 					planes[i].setVertex(j, Vector(vertexes[faces[i].vertex[j] - 1].x, vertexes[faces[i].vertex[j] - 1].y, vertexes[faces[i].vertex[j] - 1].z));

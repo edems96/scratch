@@ -19,8 +19,7 @@ bool Collision::rayTriangle(Vector start, Vector direction, Vector t1, Vector t2
 	if( u < 0.0f || u > 1.0f )
 		return false;
 	
-	Vector Q = T - e1;
-	
+	Vector Q = Vector::crossProduct(T, e1);
 	float v = Vector::dotProduct(direction, Q) * inv_det;
 	
 	if( v < 0.0f || u + v > 1.0f )
@@ -107,7 +106,7 @@ bool Collision::sphereSphere(Sphere &s1, Sphere &s2) {
 
 bool Collision::spherePlane(Sphere &sphere, Plane plane) {
 	float distance1 = 0, distance2 = 0;
-	
+	/*
 	if( 
 		rayPlane(sphere.getOrigin(), plane.getNormal() * (-1), plane, &distance1, NULL) ||
 		rayPlane(sphere.getOrigin(), plane.getNormal(), Plane(plane.getNormal() * (-1), plane.getVertices()), &distance2, NULL) ) {
@@ -128,7 +127,7 @@ bool Collision::spherePlane(Sphere &sphere, Plane plane) {
 
 		//printf("sp1: %f %f %f\n", sphere.getOrigin().x, sphere.getOrigin().y, sphere.getOrigin().z);
 		return true;
-	}
+	}*/
 	return false;
 }
 

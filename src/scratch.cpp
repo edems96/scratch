@@ -57,7 +57,6 @@ void Scratch::Init() {
 	InitOpenGL();
 	
 	player = new Player(Vector(0, 0, 0));
-	
 	model = Model::loadFromFile("res/test4.model");
 
 	running = true;
@@ -110,7 +109,14 @@ void Scratch::HandleEvent(SDL_Event event) {
 			
 			case SDL_KEYDOWN:
 				switch( event.key.keysym.sym ) {
-					case SDLK_ESCAPE: running = false; break;
+					case SDLK_ESCAPE: 
+						if( player->getCamera()->toggleMouseInScreen() )
+							SDL_ShowCursor(SDL_DISABLE);
+						else
+							SDL_ShowCursor(SDL_ENABLE);
+						
+						break;
+					case SDLK_F1: running = false; break;
 				}
 				break;
 				
@@ -130,7 +136,7 @@ void Scratch::HandleEvent(SDL_Event event) {
 void Scratch::Update() {
 	player->Update();
 	
-	Sphere sphere(player->getPosition(), 5);
+	/*Sphere sphere(player->getPosition(), 5);
 
 	for(uint i = 0; i < model->getPlanesCount(); i++) {
 		
@@ -139,14 +145,14 @@ void Scratch::Update() {
 			player->setPosition(sphere.getOrigin());
 		}
 		
-	} 
+	} */
 }
 
 void Scratch::Draw() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 	
-	player->Draw(window);
+	player->Draw(window, model->getPlanes(), model->getPlanesCount());
 	model->Draw();
 }
 

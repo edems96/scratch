@@ -56,8 +56,6 @@ void Camera::Control(SDL_Window *window) {
 		pitch += mouseVelocity * (midY - y);
 		yaw += mouseVelocity * (midX - x);
 		
-		//printf("mv: %f\n", mouseVelocity);
-		
 		lock();
 		
 		SDL_WarpMouseInWindow(window, midX, midY);
@@ -134,6 +132,11 @@ float Camera::getMouseVelocity() {
 Camera* Camera::setMouseInScreen(bool mouseInScreen) {
 	this->mouseInScreen = mouseInScreen; return this;
 }
+
 bool Camera::isMouseInScreen() {
 	return mouseInScreen;
+}
+
+bool Camera::toggleMouseInScreen() {
+	mouseInScreen = !mouseInScreen; return mouseInScreen;
 }

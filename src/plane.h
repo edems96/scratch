@@ -13,15 +13,16 @@ class Plane {
 		
 	public:
 		Plane();
-		Plane(Vector normal, Vector vertices[4]);
+		Plane(const Vector vertices[4]);
+		Plane(const Vector vertices[4], const Vector normal);
 		
 		Vector* getVertices();
 		
 		Vector getNormal();
-		Vector getVertex(uint n);
+		Vector getVertex(const uint n);
 		
 		Plane& setNormal(const Vector normal);
-		Plane& setVertex(uint n, const Vector vector);
+		Plane& setVertex(const uint n, const Vector vector);
 		
 };
 

@@ -10,6 +10,8 @@
 #include "camera.h"
 #include "texture.h"
 #include "vector.h"
+#include "plane.h"
+#include "collision.h"
 
 class Player {
 	
@@ -34,7 +36,7 @@ class Player {
 		float getSpeed();
 		
 		void Update();
-		void Draw(SDL_Window* window);
+		void Draw(SDL_Window* window, Plane *planes, uint c);
 		
 		Camera* getCamera();
 };

@@ -30,6 +30,7 @@ class Vector {
 		Vector operator/=(const float n);
 		
 		bool operator==(const Vector &vector);
+		bool operator!=(const Vector &vector);
 		
 		float length();
 		float lengthSquare();

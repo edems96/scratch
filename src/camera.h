@@ -48,6 +48,7 @@ class Camera {
 		
 		Camera* setMouseInScreen(bool mouseInScreen);
 		bool isMouseInScreen();
+		bool toggleMouseInScreen();
 };
 
 #endif

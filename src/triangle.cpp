@@ -4,12 +4,17 @@ Triangle::Triangle() {
 	
 }
 
-Triangle::Triangle(Vector vertices[3]) {
-	this->vertices = vertices;
+Triangle::Triangle(const Vector vertices[3]) {
+	for(uint i = 0; i < 3; i++) {
+		this->vertices[i].set(vertices[i]);
+	}
 }
 
-Triangle::Triangle(Vector vertices[3], const Vector normal) {
-	this->vertices = vertices;
+Triangle::Triangle(const Vector vertices[3], const Vector normal) {
+	for(uint i = 0; i < 3; i++) {
+		this->vertices[i].set(vertices[i]);
+	}
+	
 	this->normal.set(normal);
 }
 		
@@ -17,8 +22,12 @@ Vector* Triangle::getVertices() {
 	return vertices;
 }
 
-Triangle Triangle::setVertices(Vector vertices[3]) {
-	this->vertices = vertices; return *this;
+Triangle Triangle::setVertices(const Vector vertices[3]) {
+	for(uint i = 0; i < 3; i++) {
+		this->vertices[i].set(vertices[i]);
+	}
+	
+	return *this;
 }
 		
 Vector Triangle::getVertex(const uint n) {
@@ -38,7 +47,12 @@ Triangle Triangle::setNormal(const Vector normal) {
 }
 		
 Vector* Triangle::getEdges() {
-	Vector edges[3];
+	Vector *edges;
+	edges = (Vector*) malloc(sizeof(Vector) * 3);
+	
+	if( edges == NULL )
+		return NULL;
+	
 	edges[0] = vertices[0] - vertices[1];
 	edges[1] = vertices[0] - vertices[3];
 	edges[2] = vertices[1] - vertices[3];
